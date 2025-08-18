@@ -1,13 +1,13 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>并查集（Disjoint Set） | 夢よ未来へ</title><meta name="author" content="WatsonthePeanut"><meta name="copyright" content="WatsonthePeanut"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="初识并查集 API 并查集需要实现以下两个功能：  connect(x, y)：将 x 与 y 连通。 isConnected(x, y)：判断 x 与 y 是否连通。   里所说的“连通”具有如下三个性质： 1、自反性：x 和 x 是连通的。 2、对称性：如果 x 和 y 连通，那么 y 和 x 也连通。 3、传递性：如果 x 和 y 连通，y 和 z 连通，那么 x 和 z 也连通。  如：">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>并查集（Disjoint Set） | 夢よ未来へ</title><meta name="author" content="WatsonthePeanut"><meta name="copyright" content="WatsonthePeanut"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="初识并查集 API 并查集需要实现以下两个功能：  connect(x, y)：将 x 与 y 连通。 isConnected(x, y)：判断 x 与 y 是否连通。   这里所说的“连通”具有如下三个性质： 1、自反性：x 和 x 是连通的。 2、对称性：如果 x 和 y 连通，那么 y 和 x 也连通。 3、传递性：如果 x 和 y 连通，y 和 z 连通，那么 x 和 z 也连通。  如：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并查集（Disjoint Set）">
 <meta property="og:url" content="http://example.com/2025/07/29/Disjoint-Set/index.html">
 <meta property="og:site_name" content="夢よ未来へ">
-<meta property="og:description" content="初识并查集 API 并查集需要实现以下两个功能：  connect(x, y)：将 x 与 y 连通。 isConnected(x, y)：判断 x 与 y 是否连通。   里所说的“连通”具有如下三个性质： 1、自反性：x 和 x 是连通的。 2、对称性：如果 x 和 y 连通，那么 y 和 x 也连通。 3、传递性：如果 x 和 y 连通，y 和 z 连通，那么 x 和 z 也连通。  如：">
+<meta property="og:description" content="初识并查集 API 并查集需要实现以下两个功能：  connect(x, y)：将 x 与 y 连通。 isConnected(x, y)：判断 x 与 y 是否连通。   这里所说的“连通”具有如下三个性质： 1、自反性：x 和 x 是连通的。 2、对称性：如果 x 和 y 连通，那么 y 和 x 也连通。 3、传递性：如果 x 和 y 连通，y 和 z 连通，那么 x 和 z 也连通。  如：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/DisjointSetPost/0.png">
 <meta property="article:published_time" content="2025-07-29T06:23:13.000Z">
-<meta property="article:modified_time" content="2025-08-04T09:34:25.853Z">
+<meta property="article:modified_time" content="2025-08-18T07:14:59.676Z">
 <meta property="article:author" content="WatsonthePeanut">
 <meta property="article:tag" content="Data Structure">
 <meta property="article:tag" content="CS61B">
@@ -19,7 +19,7 @@
   "url": "http://example.com/2025/07/29/Disjoint-Set/",
   "image": "http://example.com/img/DisjointSetPost/0.png",
   "datePublished": "2025-07-29T06:23:13.000Z",
-  "dateModified": "2025-08-04T09:34:25.853Z",
+  "dateModified": "2025-08-18T07:14:59.676Z",
   "author": [
     {
       "@type": "Person",
@@ -168,14 +168,14 @@
 <li><code>isConnected(x, y)</code>：判断 x 与 y 是否连通。</li>
 </ul>
 <blockquote>
-<p>里所说的“连通”具有如下三个性质：<br>
+<p>这里所说的“连通”具有如下三个性质：<br>
 1、自反性：x 和 x 是连通的。<br>
 2、对称性：如果 x 和 y 连通，那么 y 和 x 也连通。<br>
 3、传递性：如果 x 和 y 连通，y 和 z 连通，那么 x 和 z 也连通。</p>
 </blockquote>
-<p>如：<br>
-<img src="/img/DisjointSetPost/1.1.jpg" alt=""><br>
-为了简化我们的实现，我们先：</p>
+<p>如：</p>
+<p><img src="/img/DisjointSetPost/1.1.jpg" alt=""></p>
+<p>为了简化我们的实现，我们先：</p>
 <ul>
 <li>强制所有元素都为整数；</li>
 <li>提前声明好并查集中元素的数目，且所有元素之间无连接。</li>
@@ -189,17 +189,17 @@
 <li>方法的调用是交叉的，而非按照固定顺序调用。</li>
 </ul>
 <h2 id="追踪连通分量">追踪连通分量</h2>
-<p><img src="/img/DisjointSetPost/1.2.jpg" alt=""><br>
-我们看着图就能分辨出哪两个元素之间是连通的，但计算机是无法在底层为我们绘制一幅一模一样的图的，所以也许我们可以：</p>
+<p><img src="/img/DisjointSetPost/1.2.jpg" alt=""></p>
+<p>我们看着图就能分辨出哪两个元素之间是连通的，但计算机是无法在底层为我们绘制一幅一模一样的图的，所以也许我们可以：</p>
 <ul>
 <li>连通两个元素时，将每一条连接起来的线存储起来；</li>
 <li>检查连通性时，用某种迭代来遍历每条线来检查一个元素能否到达另一个元素。</li>
 </ul>
 <p>光读这些文字都开始头大了。事实上，这种方法真实现起来也是非常慢的。我们需要一种更好的思路。</p>
-<p><img src="/img/DisjointSetPost/1.2.jpg" alt=""><br>
-这张图不知怎的会有一种感觉，0、1、2、4 是一组，3、5 是一组，6 是一组，同组中的元素之间相互连通，不同组中的元素之间没有连接。这个思路怎么样呢？<br>
-<img src="/img/DisjointSetPost/1.3.jpg" alt=""><br>
-这个想法似乎是可行的，让我们尝试实现！</p>
+<p><img src="/img/DisjointSetPost/1.2.jpg" alt=""></p>
+<p>这张图不知怎的会有一种感觉，0、1、2、4 是一组，3、5 是一组，6 是一组，同组中的元素之间相互连通，不同组中的元素之间没有连接。这个思路怎么样呢？</p>
+<p><img src="/img/DisjointSetPost/1.3.jpg" alt=""></p>
+<p>这个想法似乎是可行的，让我们尝试实现！</p>
 <h1>实现并查集</h1>
 <p>接下来的问题是如果我想实际编写这个程序，我的并查集对象必须有哪些实例变量来在内存中追踪这些东西呢？</p>
 <h2 id="List-of-Sets">List of Sets</h2>
@@ -207,36 +207,36 @@
 <p>用一个集合来表示一个组，再用一个列表来存储这些集合，如：[{0, 1, 2, 4}, {3, 5}, {6}]。用 Java 表示就是 <code>List&lt;Set&lt;Integer&gt;&gt;</code>。</p>
 <p>但如果我们用上一节的渐近工具检查一下就会发现这种方法是很慢的：</p>
 <p>最开始时每个元素都是单独的一个集合，这意味着我们如果要查找一个元素就需要从头开始遍历集合，最坏的情况就是从头遍历到尾，消耗的时间将是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>。如果并查集中有成千上万个元素，这将是非常慢的。</p>
-<p>当然这只是最坏的情况，也有可能只需要查找第一个或是第二个元素，花费的时间就不需要这么多，所以我们用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> 来表示花费的时间，这意味着这个操作花费时间随着输入大小的增长阶是小于等于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 的。<br>
-<img src="/img/DisjointSetPost/2.1.jpg" alt=""></p>
+<p>当然这只是最坏的情况，也有可能只需要查找第一个或是第二个元素，花费的时间就不需要这么多，所以我们用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span> 来表示花费的时间，这意味着这个操作花费时间随着输入大小的增长阶是小于等于 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 的。</p>
+<p><img src="/img/DisjointSetPost/2.1.jpg" alt=""></p>
 <h2 id="Quick-Find">Quick Find</h2>
 <p>思路二：整型数组</p>
-<p>我们利用一个数组，数组下标代表并查集元素的值，当两个组连通时，将两个组中所有元素对应的数组元素的值置为相同。<br>
-<img src="/img/DisjointSetPost/2.2.jpg" alt=""></p>
+<p>我们利用一个数组，数组下标代表并查集元素的值，当两个组连通时，将两个组中所有元素对应的数组元素的值置为相同。</p>
+<p><img src="/img/DisjointSetPost/2.2.jpg" alt=""></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickFindDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">	<span class="keyword">private</span> <span class="type">int</span>[] id;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="title function_">QuickFindDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        id = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="comment">// 初始化：每个元素是自己的连通分量标识</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; i++) &#123;</span><br><span class="line">            id[i] = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">    	<span class="keyword">return</span> id[p] == id[q];</span><br><span class="line">	&#125;</span><br><span class="line"> </span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> p, <span class="type">int</span> q)</span> &#123;</span><br><span class="line">    	<span class="type">int</span> <span class="variable">pid</span> <span class="operator">=</span> id[p];</span><br><span class="line">        <span class="type">int</span> <span class="variable">qid</span> <span class="operator">=</span> id[q];</span><br><span class="line">       	<span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; id.length; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (id[i] == pid) &#123;</span><br><span class="line">              	id[i] = qid;</span><br><span class="line">        	&#125;</span><br><span class="line">    	&#125;...</span><br></pre></td></tr></table></figure>
 <p>这样 <code>isConnected(p, q)</code> 就会直接比较 <code>id[p]</code> 与 <code>id[q]</code> 是否相等而不需要遍历了，无论并查集中有多少元素，这个操作都只花费常数时间，非常快！</p>
 <p>但如果我们 <code>connect(p, q)</code>，就需要将 <code>p</code> 所在组中对应的所有数组元素的值置为与 <code>q</code> 对应的值相等，这就又需要遍历了。有没有更好的方法？</p>
 <h2 id="Quick-Union">Quick Union</h2>
 <p>上个思路的 <code>isConnected</code> 很快，但 <code>connect</code> 很慢，本质上是因为 <code>connect</code> 在合并两个集合时需要修改其中一个集合的每个元素对应的数组中的值。我们能不能只修改一个值就实现两个集合的合并？</p>
 <p>思路三：分配父项</p>
-<p>为每个元素都分配一个父项，最终会形成一个树形结构：<br>
-<img src="/img/DisjointSetPost/2.3.jpg" alt=""></p>
+<p>为每个元素都分配一个父项，最终会形成一个树形结构：</p>
+<p><img src="/img/DisjointSetPost/2.3.jpg" alt=""></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">QuickUnionDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">QuickUnionDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">            parent[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">findParent</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (parents[p] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            p = parents[p];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">ap</span> <span class="operator">=</span> findParent(a);</span><br><span class="line">        <span class="type">int</span> <span class="variable">bp</span> <span class="operator">=</span> findParent(b);</span><br><span class="line">        parent[ap] = bp;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findParent(a) == findParent(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>每个元素对应数组的值不再是一个统一的数而是它父项的值。“-1”则代表它是这个集合的“根”。</p>
-<p>那么具体应该怎样合并两个集合呢？假设我们要 <code>connect(5, 2)</code>，我们不能直接修改 5 的父项为 2 因为这样 5 和 3 之间就会断连。我们应该分别追溯到 5 和 2 的根，再将 5 的根（也就是 3）连接到 2 的根（也就是 0）上。<br>
-<img src="/img/DisjointSetPost/2.4.jpg" alt=""><br>
-但比起上一种方法，这种方法有一个潜在的问题是：我们不得不爬一棵树。</p>
+<p>那么具体应该怎样合并两个集合呢？假设我们要 <code>connect(5, 2)</code>，我们不能直接修改 5 的父项为 2 因为这样 5 和 3 之间就会断连。我们应该分别追溯到 5 和 2 的根，再将 5 的根（也就是 3）连接到 2 的根（也就是 0）上。</p>
+<p><img src="/img/DisjointSetPost/2.4.jpg" alt=""></p>
+<p>但比起上一种方法，这种方法有一个潜在的问题是：我们不得不爬一棵树。</p>
 <ul>
 <li><code>connect()</code> 需要爬到根节点以合并两棵树；</li>
 <li><code>isConnected()</code> 需要爬到根节点以判断两个元素的根是否相同。</li>
 </ul>
-<p>如果我们有这么一棵树，那最坏情况消耗的时间又回到了第一种方法：<br>
-<img src="/img/DisjointSetPost/2.5.jpg" alt=""><br>
-如何避免构造出这么一棵参天大树呢？</p>
+<p>如果我们有这么一棵树，那最坏情况消耗的时间又回到了第一种方法：</p>
+<p><img src="/img/DisjointSetPost/2.5.jpg" alt=""></p>
+<p>如何避免构造出这么一棵参天大树呢？</p>
 <h2 id="Weighted-Quick-Union">Weighted Quick Union</h2>
 <p>思路四：加权快速联合</p>
-<p>在对两棵树进行合并时，我们将增加一个比较的步骤：<br>
-<img src="/img/DisjointSetPost/2.6.jpg" alt=""></p>
+<p>在对两棵树进行合并时，我们将增加一个比较的步骤：</p>
+<p><img src="/img/DisjointSetPost/2.6.jpg" alt=""></p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WeightedQuickUnionDS</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parent;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">WeightedQuickUnionDS</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">            parent[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">findParent</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">while</span> (parents[p] &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            p = parents[p];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">ap</span> <span class="operator">=</span> findParent(a);</span><br><span class="line">        <span class="type">int</span> <span class="variable">bp</span> <span class="operator">=</span> findParent(b);</span><br><span class="line">        <span class="keyword">if</span> (ap == bp) <span class="keyword">return</span>;  <span class="comment">// 已经在同一集合中，直接返回</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parent[ap] &lt;= parent[bp]) &#123;  <span class="comment">// ap的集合更大或相等</span></span><br><span class="line">            parent[ap] += parent[bp];</span><br><span class="line">            parent[bp] = ap;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            parent[bp] += parent[ap];</span><br><span class="line">            parent[ap] = bp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findParent(a) == findParent(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>显然 A 方法要比 B 好，因为 A 生成的树高度为 2，而 B 生成的树高度为 3。因此在将两棵树合并前，需要先比较两棵树的大小，再将小树合并到大树的根节点上，这样就能保证较大的树不会被较小的树“抬高”。</p>
 <p>思路我们明确了，我们该如何存储并比较每棵树的大小呢？有两个方法：</p>
@@ -244,16 +244,16 @@
 <li>因为根节点对应数组元素的值只利用了符号，没有利用大小，因此我们可以用 -weight 来代替 -1，如：<code>parent[a] = -4</code> 表示以 a 为根节点的树共有 4 个节点；</li>
 <li>另外创建一个数组来存储每棵树的大小。</li>
 </ul>
-<p><img src="/img/DisjointSetPost/2.7.jpg" alt=""><br>
-显然方法 1 是更好的。</p>
+<p><img src="/img/DisjointSetPost/2.7.jpg" alt=""></p>
+<p>显然方法 1 是更好的。</p>
 <p>现在再让我们来分析一下此时的时间复杂度吧，想象一下树的高度随着节点增加而增长的最快方式：</p>
-<p><img src="/img/DisjointSetPost/2.8.jpg" alt="1 个节点时高度为 0"><br>
-<img src="/img/DisjointSetPost/2.9.jpg" alt="2 个节点时高度为 1"><br>
-<img src="/img/DisjointSetPost/2.10.jpg" alt="3 个节点不可能构造出更高的树"><br>
-<img src="/img/DisjointSetPost/2.11.jpg" alt="至少需要另一棵节点数相同的树才能使高度增加，此时共有 4 个节点"><br>
-<img src="/img/DisjointSetPost/2.12.jpg" alt="同理至少 8 个节点才能使树高度再次增加"><br>
-<img src="/img/DisjointSetPost/2.13.jpg" alt=""><br>
-<img src="/img/DisjointSetPost/2.14.jpg" alt=""></p>
+<p><img src="/img/DisjointSetPost/2.8.jpg" alt="1 个节点时高度为 0"></p>
+<p><img src="/img/DisjointSetPost/2.9.jpg" alt="2 个节点时高度为 1"></p>
+<p><img src="/img/DisjointSetPost/2.10.jpg" alt="3 个节点不可能构造出更高的树"></p>
+<p><img src="/img/DisjointSetPost/2.11.jpg" alt="至少需要另一棵节点数相同的树才能使高度增加，此时共有 4 个节点"></p>
+<p><img src="/img/DisjointSetPost/2.12.jpg" alt="同理至少 8 个节点才能使树高度再次增加"></p>
+<p><img src="/img/DisjointSetPost/2.13.jpg" alt=""></p>
+<p><img src="/img/DisjointSetPost/2.14.jpg" alt=""></p>
 <p>最终我们可以得到这个表格：</p>
 <table>
 <thead>
@@ -290,12 +290,12 @@
 <p>没错，这样确实会让树的高度增加地更缓慢，但按照最坏情况进行时间复杂度分析，这两者几乎是一致的，都为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Θ</mi><mo stretchy="false">(</mo><mi>log</mi><mo>⁡</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\Theta(\log N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Θ</span><span class="mopen">(</span><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>。而后者在代码实现上会更复杂一些，有兴趣的同学可以尝试实现。</p>
 <h2 id="WQU-with-Path-Compression">WQU with Path Compression</h2>
 <p>还有可以优化的地方吗？</p>
-<p>听起来有点疯狂，但是有的兄弟，有的。<br>
-<img src="/img/DisjointSetPost/2.15.jpg" alt=""><br>
-假如我们想判断 15 和 10 是否连通，我们会先检查 15 的根节点是 0，接着检查 10 的根节点是 0，与 15 的根节点相同，所以连通。但在这期间，不只是 15 和 10，我们还路过了 11、5、1、3 这些节点，这些节点的根节点都必定是 0。如果我们把这些节点都直接绑定到根节点，下次检查这些节点的时候不就不需要再“爬树”了吗？</p>
-<p><img src="/img/DisjointSetPost/2.16.jpg" alt=""><br>
-<img src="/img/DisjointSetPost/2.17.jpg" alt=""><br>
-思路五：带有路径压缩的加权快速联合</p>
+<p>听起来有点疯狂，但是有的兄弟，有的。</p>
+<p><img src="/img/DisjointSetPost/2.15.jpg" alt=""></p>
+<p>假如我们想判断 15 和 10 是否连通，我们会先检查 15 的根节点是 0，接着检查 10 的根节点是 0，与 15 的根节点相同，所以连通。但在这期间，不只是 15 和 10，我们还路过了 11、5、1、3 这些节点，这些节点的根节点都必定是 0。如果我们把这些节点都直接绑定到根节点，下次检查这些节点的时候不就不需要再“爬树”了吗？</p>
+<p><img src="/img/DisjointSetPost/2.16.jpg" alt=""></p>
+<p><img src="/img/DisjointSetPost/2.17.jpg" alt=""></p>
+<p>思路五：带有路径压缩的加权快速联合</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WQUwithPathCompression</span> <span class="keyword">implements</span> <span class="title class_">DisjointSets</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span>[] parents;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">WQUwithPathCompression</span><span class="params">(<span class="type">int</span> N)</span> &#123;</span><br><span class="line">        parents = <span class="keyword">new</span> <span class="title class_">int</span>[N];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; N; ++i) &#123;</span><br><span class="line">            parents[i] = -<span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">findParent</span><span class="params">(<span class="type">int</span> p)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (parents[p] &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> p;</span><br><span class="line">        &#125;</span><br><span class="line">        parents[p] = findParent(parents[p]);    <span class="comment">// 路径压缩</span></span><br><span class="line">        <span class="keyword">return</span> parents[p];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">connect</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">ap</span> <span class="operator">=</span> findParent(a);</span><br><span class="line">        <span class="type">int</span> <span class="variable">bp</span> <span class="operator">=</span> findParent(b);</span><br><span class="line">        <span class="keyword">if</span> (ap == bp) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parents[ap] &lt;= parents[bp]) &#123;</span><br><span class="line">            parents[ap] += parents[bp];</span><br><span class="line">            parents[bp] = ap;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            parents[bp] += parents[ap];</span><br><span class="line">            parents[ap] = bp;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isConnected</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> findParent(a) == findParent(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>随着调用 <code>connect</code> 和 <code>isConnected</code> 的次数越来越多，树就会越来越扁平，使用这种数据结构的速度就会越来越快。</p>
 <p>这时我们如果再分析一次节点数与树的高度的关系，我们将会得到一个 <strong>反阿克曼函数 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>α</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(\alpha(N))</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">))</span></span></span></span></strong>，它增长得极其缓慢：</p>
