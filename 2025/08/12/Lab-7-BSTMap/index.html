@@ -1,0 +1,352 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Lab 7: BSTMap | 夢よ未来へ</title><meta name="author" content="WatsonthePeanut"><meta name="copyright" content="WatsonthePeanut"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="ffffff"><meta name="description" content="前言  实验文档：https:&#x2F;&#x2F;sp21.datastructur.es&#x2F;materials&#x2F;lab&#x2F;lab7&#x2F;lab7  在本实验中，你将实现 BSTMap——一个基于二叉搜索树（BST）的 Map61B 接口实现，该接口代表一种基础的基于树的映射结构。你需要完全从零开始实现它，并按照教程提供的接口进行开发。 完成实现后，你需要将你的 BSTMap 与基于链表的映射实现 ULLMap 以及 J">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Lab 7: BSTMap">
+<meta property="og:url" content="http://example.com/2025/08/12/Lab-7-BSTMap/index.html">
+<meta property="og:site_name" content="夢よ未来へ">
+<meta property="og:description" content="前言  实验文档：https:&#x2F;&#x2F;sp21.datastructur.es&#x2F;materials&#x2F;lab&#x2F;lab7&#x2F;lab7  在本实验中，你将实现 BSTMap——一个基于二叉搜索树（BST）的 Map61B 接口实现，该接口代表一种基础的基于树的映射结构。你需要完全从零开始实现它，并按照教程提供的接口进行开发。 完成实现后，你需要将你的 BSTMap 与基于链表的映射实现 ULLMap 以及 J">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/cover.jpg">
+<meta property="article:published_time" content="2025-08-12T00:54:13.000Z">
+<meta property="article:modified_time" content="2025-08-14T02:33:23.352Z">
+<meta property="article:author" content="WatsonthePeanut">
+<meta property="article:tag" content="CS61B">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/cover.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Lab 7: BSTMap",
+  "url": "http://example.com/2025/08/12/Lab-7-BSTMap/",
+  "image": "http://example.com/img/cover.jpg",
+  "datePublished": "2025-08-12T00:54:13.000Z",
+  "dateModified": "2025-08-14T02:33:23.352Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "WatsonthePeanut",
+      "url": "https://github.com/WatsonthePeanut"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.ico"><link rel="canonical" href="http://example.com/2025/08/12/Lab-7-BSTMap/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: {"limitCount":150,"languages":{"author":"作者: WatsonthePeanut","link":"链接: ","source":"来源: 夢よ未来へ","info":"著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。"}},
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Lab 7: BSTMap',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/background.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">4</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-heart"></i><span> Miku</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-image"></i><span> 图库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-circle-info"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">夢よ未来へ</span></a><a class="nav-page-title" href="/"><span class="site-name">Lab 7: BSTMap</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-heart"></i><span> Miku</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/gallery/"><i class="fa-fw fas fa-image"></i><span> 图库</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 链接</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-circle-info"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Lab 7: BSTMap</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2025-08-12T00:54:13.000Z" title="发表于 2025-08-12 08:54:13">2025-08-12</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>11分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>前言</h1>
+<blockquote>
+<p>实验文档：<a target="_blank" rel="noopener" href="https://sp21.datastructur.es/materials/lab/lab7/lab7">https://sp21.datastructur.es/materials/lab/lab7/lab7</a></p>
+</blockquote>
+<p>在本实验中，你将实现 BSTMap——一个基于二叉搜索树（BST）的 Map61B 接口实现，该接口代表一种基础的基于树的映射结构。你需要完全从零开始实现它，并按照教程提供的接口进行开发。</p>
+<p>完成实现后，你需要将你的 BSTMap 与基于链表的映射实现 <code>ULLMap</code> 以及 Java 内置的 <code>TreeMap</code> 类（同样基于 BST）进行性能对比分析。</p>
+<h1>BSTMap</h1>
+<p>你需要创建一个 BSTMap 类来实现 Map61B 接口，该类以二叉搜索树（BST）作为核心数据结构。代码文件必须命名为 <code>BSTMap.java</code>。</p>
+<p>除以下方法外，必须实现 Map61B 接口中的所有方法：</p>
+<ul>
+<li><code>remove()</code></li>
+<li><code>iterator()</code></li>
+<li><code>keySet()</code></li>
+</ul>
+<p>对于上述未实现的方法，应抛出 <code>UnsupportedOperationException</code> 异常。</p>
+<p>初始阶段，你的代码可能无法编译，因为尚未实现所有必要方法。可先写出所有方法签名，暂时为未完成的方法抛出 <code>UnsupportedOperationException</code>，随后逐步实现具体逻辑。</p>
+<p>除此之外，你还需要在 <code>BSTMap</code> 中添加一个非接口要求的方法 <code>printInOrder()</code>，用于按照键的递增顺序打印 BSTMap 的内容。此方法不会作为测试依据，但有助于调试你的实现。</p>
+<p>在实现中，你需要假设 <code>BSTMap&lt;K,V&gt;</code> 中的泛型键 <code>K</code> 继承自 <a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Comparable.html">Comparable</a> 接口，即所有泛型键 <code>K</code> 均要实现 <code>compareTo</code> 方法。</p>
+<p>可通过 Java 中的<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/tutorial/java/generics/bounded.html">有界类型参数（bounded type parameter）</a>强制这一约束（参考下方 Oracle 文档示例）：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NaturalNumber</span>&lt;T <span class="keyword">extends</span> <span class="title class_">Integer</span>&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> T n;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">NaturalNumber</span><span class="params">(T n)</span>  &#123; <span class="built_in">this</span>.n = n; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isEven</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> n.intValue() % <span class="number">2</span> == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// isEven 方法通过 n 调用 Integer 类中定义的的 intValue 方法</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们还建议你利用私有的嵌套类 <code>BSTNode</code> 来帮助你简化你的实现。如何设计和使用这个内部类取决于你！</p>
+<p>你可以用 <code>TestBSTMap.java</code> 来测试你的实现。</p>
+<p>下面的资料可能会对你有帮助：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.google.com/presentation/d/1Bl-PTBfa5sp1vM1l0OSMpK_0JFQ-MT6je4O26-9ffpg/edit?slide=id.g50738e5fde_0_0#slide=id.g50738e5fde_0_0">第 16 讲幻灯片</a></li>
+<li><a target="_blank" rel="noopener" href="https://algs4.cs.princeton.edu/32bst/BST.java.html">选修教材中的 BST 源码</a></li>
+<li>给出的基于无需链表的映射实现 <code>ULLMap.java</code></li>
+</ul>
+<h2 id="有界类型参数">有界类型参数</h2>
+<p>按照有界类型参数的要求，我们在声明 <code>BSTMap</code> 的时候需要这样写：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BSTMap</span>&lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><strong><code>Key extends Comparable&lt;Key&gt;</code> 的意思？</strong></li>
+</ol>
+<p>这是一个有界类型参数（bounded type parameter），它告诉编译器：</p>
+<blockquote>
+<p>任何作为 <code>Key</code> 的类型，都必须是 <code>Comparable&lt;Key&gt;</code> 的子类型（或者本身实现了这个接口）。</p>
+</blockquote>
+<p>换句话说，<code>Key</code> 可以是任何类，只要它实现了：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">int</span> <span class="title function_">compareTo</span><span class="params">(Key other)</span></span><br></pre></td></tr></table></figure>
+<p>这样的接口方法。</p>
+<ol start="2">
+<li><strong>为什么 <code>Key</code> 自己没有 <code>compareTo</code> 方法也可以这样写？</strong></li>
+</ol>
+<p>因为在声明泛型类的时候，<code>Key</code> 只是一个占位符，它并不是一个具体的类，所以它没法去“重写”方法。</p>
+<p>约束写在这里，是为了保证当你真正使用 <code>BSTMap</code> 时，传入的类型满足要求，比如：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">BSTMap&lt;String, Integer&gt; bst = <span class="keyword">new</span> <span class="title class_">BSTMap</span>&lt;&gt;(); <span class="comment">// ✅ 因为 String 实现了 Comparable&lt;String&gt;</span></span><br><span class="line"></span><br><span class="line">BSTMap&lt;Integer, String&gt; bst = <span class="keyword">new</span> <span class="title class_">BSTMap</span>&lt;&gt;(); <span class="comment">// ✅ 因为 Integer 实现了 Comparable&lt;Integer&gt;</span></span><br><span class="line"></span><br><span class="line">BSTMap&lt;Object, String&gt; bst = <span class="keyword">new</span> <span class="title class_">BSTMap</span>&lt;&gt;(); <span class="comment">// ❌ 编译错误，因为 Object 没实现 Comparable&lt;Object&gt;</span></span><br></pre></td></tr></table></figure>
+<h2 id="具体实现">具体实现</h2>
+<p>第一点：在编码前，首先需要明确对 <code>null</code> 值的处理：</p>
+<ul>
+<li><code>key</code> 值不允许为 <code>null</code>，但 <code>value</code> 值可以为 <code>null</code>。</li>
+<li>当 <code>get()</code> 方法没有找到目标节点时会返回 <code>null</code>。</li>
+<li>当 <code>remove()</code> 方法没有找到要删除的节点时也会返回 <code>null</code>。</li>
+</ul>
+<p>因此，将 <strong>“值为 <code>null</code> 的节点”</strong> 与 <strong>“未找到节点时返回的 <code>null</code>”</strong> 区分开是十分必要的。</p>
+<p>第二点：必须得先弄明白每个方法的作用，才能写好递归：</p>
+<ol>
+<li>对于广义上的 getter 类方法</li>
+</ol>
+<ul>
+<li>如 <code>get()</code> 只会读取 BST 的内部节点，不会对 BST 的内部结构做出任何修改。</li>
+<li>这种方法在调用递归时，每层递归会将下一层递归返回的结果直接 return，而不需要进行存储，所以 <strong>每层递归返回的都是最后一次递归的结果</strong> 。</li>
+<li>最后一次递归会找到目标键，结束递归并将对应值直接返回。<strong>整个方法的返回值就是最后一次递归返回的结果。</strong></li>
+</ul>
+<ol start="2">
+<li>对于广义上的 setter 类方法</li>
+</ol>
+<ul>
+<li>如 <code>put()</code> 和 <code>remove()</code> 会将 BST 的内部节点进行增加和删除，导致 BST 发生结构上的变化。</li>
+<li>这种方法在调用递归时，每层递归都会对本层状态进行一系列修改，所以每层递归都必须用下一层递归返回的结果更新自己的引用。也就是说必须用 <code>node.left = ...</code> 或 <code>node.right = ...</code> 对下层返回的结果进行保存，接着对本层字段进行一系列更新，最后将更新的结果返回给上一层递归。所以 <strong>每层递归返回的都是本层更新后的结果</strong> 。</li>
+<li>最后一次递归会找到目标节点，就目标节点进行一系列修改，将修改结果返回给上一层递归，接着上一层递归会接着进行修改和返回······ <strong>整个方法的返回值将是经过一系列修改后的最初调用时的根（不是根号，可以理解为根节点）。</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> bstmap;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.Iterator;</span><br><span class="line"><span class="keyword">import</span> java.util.Set;</span><br><span class="line"><span class="keyword">import</span> java.util.TreeSet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BSTMap</span>&lt;K <span class="keyword">extends</span> <span class="title class_">Comparable</span>&lt;K&gt;, V&gt; <span class="keyword">implements</span> <span class="title class_">Map61B</span>&lt;K, V&gt; &#123;</span><br><span class="line">    <span class="keyword">private</span> BSTNode root;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">BSTNode</span> &#123;</span><br><span class="line">        <span class="keyword">private</span> K key;</span><br><span class="line">        <span class="keyword">private</span> V value;</span><br><span class="line">        <span class="keyword">private</span> BSTNode left, right;</span><br><span class="line">        <span class="keyword">private</span> <span class="type">int</span> size;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="title function_">BSTNode</span><span class="params">(K key, V value, <span class="type">int</span> size)</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.key = key;</span><br><span class="line">            <span class="built_in">this</span>.value = value;</span><br><span class="line">            <span class="built_in">this</span>.size = size;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">BSTMap</span><span class="params">()</span> &#123;</span><br><span class="line">        root = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">clear</span><span class="params">()</span> &#123;</span><br><span class="line">        root = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">containsKey</span><span class="params">(K key)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;calls containsKey() with a null key&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> getNode(key, root) != <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">get</span><span class="params">(K key)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;calls get() with a null key&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">BSTNode</span> <span class="variable">node</span> <span class="operator">=</span> getNode(key, root);</span><br><span class="line">        <span class="keyword">return</span> (node == <span class="literal">null</span>) ? <span class="literal">null</span> : node.value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 直接返回键所对应的节点而不是值，就能将 “值为 null 的节点” 与 “未找到时返回的 null 值” 区分开了</span></span><br><span class="line">    <span class="keyword">private</span> BSTNode <span class="title function_">getNode</span><span class="params">(K key, BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;    <span class="comment">// 未找到目标 key</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> key.compareTo(node.key);</span><br><span class="line">        <span class="keyword">if</span> (cmp == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> node;    <span class="comment">// 若找到目标 key 直接返回</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> getNode(key, node.left);     <span class="comment">// 直接 return</span></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> getNode(key, node.right);    <span class="comment">// 直接 return</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> size(root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">(BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> (node == <span class="literal">null</span>) ? <span class="number">0</span> : node.size;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">put</span><span class="params">(K key, V value)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;calls put() with a null key&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        root = put(key, value, root);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BSTNode <span class="title function_">put</span><span class="params">(K key, V value, BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">BSTNode</span>(key, value, <span class="number">1</span>);  <span class="comment">// 未找到 key 时新建节点</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> key.compareTo(node.key);</span><br><span class="line">        <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            node.left = put(key, value, node.left); <span class="comment">// 更新引用</span></span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            node.right = put(key, value, node.right);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            node.value = value;     <span class="comment">// 找到 key 时更新 value</span></span><br><span class="line">        &#125;</span><br><span class="line">        node.size = <span class="number">1</span> + size(node.left) + size(node.right); <span class="comment">// 树结构发生变化时需要更新节点 size</span></span><br><span class="line">        <span class="keyword">return</span> node;    <span class="comment">// 每层返回当前节点</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">remove</span><span class="params">(K key)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;calls remove() with a null key&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">BSTNode</span> <span class="variable">node</span> <span class="operator">=</span> getNode(key, root);</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;    <span class="comment">// 不存在直接返回 null</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">V</span> <span class="variable">value</span> <span class="operator">=</span> node.value;</span><br><span class="line">        root = remove(key, root);</span><br><span class="line">        <span class="keyword">return</span> value;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BSTNode <span class="title function_">remove</span><span class="params">(K key, BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;    <span class="comment">// 防御性判空</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">int</span> <span class="variable">cmp</span> <span class="operator">=</span> key.compareTo(node.key);</span><br><span class="line">        <span class="keyword">if</span> (cmp &lt; <span class="number">0</span>) &#123;</span><br><span class="line">            node.left = remove(key, node.left);</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (cmp &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            node.right = remove(key, node.right);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (node.left == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> node.right;  <span class="comment">// 排除子节点为 0 和 1 的情况</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (node.right == <span class="literal">null</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> node.left;   <span class="comment">// 排除子节点为 0 和 1 的情况</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="type">BSTNode</span> <span class="variable">t</span> <span class="operator">=</span> node;       <span class="comment">// 子节点为 2 时，用 t 暂存一下待删节点</span></span><br><span class="line">            node = min(t.right);    <span class="comment">// 令 node 指向右子树的最小节点</span></span><br><span class="line">            node.right = deleteMin(t.right);    <span class="comment">// 将右子树的最小节点删除后，令 node.right 指向更新后的 t.right</span></span><br><span class="line">            node.left = t.left;     <span class="comment">// 令 node.left 指向 t.left</span></span><br><span class="line">        &#125;</span><br><span class="line">        node.size = <span class="number">1</span> + size(node.left) + size(node.right); <span class="comment">// 更新 size</span></span><br><span class="line">        <span class="keyword">return</span> node;    <span class="comment">// 将 node 返回给上一层的引用</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BSTNode <span class="title function_">min</span><span class="params">(BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;    <span class="comment">// 防御性判空</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (node.left == <span class="literal">null</span>) ? node : min(node.left);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> BSTNode <span class="title function_">deleteMin</span><span class="params">(BSTNode node)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">null</span>;    <span class="comment">// 防御性判空</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (node.left == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> node.right;  <span class="comment">// 最后一层递归删除最左侧节点</span></span><br><span class="line">        &#125;</span><br><span class="line">        node.left = deleteMin(node.left);</span><br><span class="line">        node.size = <span class="number">1</span> + size(node.left) + size(node.right);</span><br><span class="line">        <span class="keyword">return</span> node;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> V <span class="title function_">remove</span><span class="params">(K key, V value)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (key == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;calls remove() with a null key&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">BSTNode</span> <span class="variable">node</span> <span class="operator">=</span> getNode(key, root);</span><br><span class="line">        <span class="keyword">if</span> (node != <span class="literal">null</span> &amp;&amp; (value == <span class="literal">null</span> ? node.value == <span class="literal">null</span> : value.equals(node.value))) &#123;</span><br><span class="line">            <span class="keyword">return</span> remove(key);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Set&lt;K&gt; <span class="title function_">keySet</span><span class="params">()</span> &#123;</span><br><span class="line">        TreeSet&lt;K&gt; keys = <span class="keyword">new</span> <span class="title class_">TreeSet</span>&lt;&gt;();</span><br><span class="line">        inOrder(root, keys);</span><br><span class="line">        <span class="keyword">return</span> keys;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">inOrder</span><span class="params">(BSTNode node, TreeSet&lt;K&gt; keys)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        inOrder(node.left, keys);</span><br><span class="line">        keys.add(node.key);</span><br><span class="line">        inOrder(node.right, keys);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> Iterator&lt;K&gt; <span class="title function_">iterator</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> keySet().iterator();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printInOrder</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">StringBuilder</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuilder</span>();</span><br><span class="line">        printInOrder(root, s);</span><br><span class="line">        System.out.println(s);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 利用一个 helper 就不需要 for 循环进行多次遍历，只需要利用一次中序遍历就可以记录整棵树的节点了</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">printInOrder</span><span class="params">(BSTNode node, StringBuilder s)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (node == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        printInOrder(node.left, s);</span><br><span class="line">        s.append(node.key);</span><br><span class="line">        s.append(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        s.append(node.value == <span class="literal">null</span> ? <span class="string">&quot;null&quot;</span> : node.value.toString());</span><br><span class="line">        s.append(<span class="string">&quot;\n&quot;</span>);</span><br><span class="line">        printInOrder(node.right, s);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1>有多快？</h1>
+<p>在 <code>InsertRandomSpeedTest.java</code> 和 <code>InsertInOrderSpeedTest.java</code> 中提供了两个交互式速度测试程序。注意：在完成 <code>BSTMap</code> 的实现之前，不要尝试运行这些测试。完成后，你可以在 IntelliJ 中运行它们。</p>
+<p><code>InsertRandomSpeedTest</code> 类将用于比较：你实现的 <code>BSTMap</code>、提供的 <code>ULLMap</code>（基于链表的简单实现）、Java 内置的 <code>TreeMap</code>（基于平衡 BST）、Java 内置的 <code>HashMap</code>（基于哈希表，将在后续实验学习）的元素插入速度。程序会要求你输入：字符串长度（要插入的键的长度）、数据规模（插入的键值对数量）、程序会生成指定数量的随机字符串，并将它们作为 <code>&lt;String, Integer&gt;</code> 键值对插入各个 Map 中。</p>
+<p>比较你的实现与工业级强度的实现之间的性能差异。注意：小规模数据可能无法准确反映渐近复杂度，因此请确保测试数据足够大（如 10,000 或 100,000 级别），以避免结果不符合预期。将测试结果记录在 <code>speedTestResults.txt</code> 中，格式不限，数据点数量无硬性要求。</p>
+<p>接着尝试运行 <code>InsertInOrderSpeedTest</code>，该测试与 <code>InsertRandomSpeedTest</code> 类似，但所有字符串按照键的 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Lexicographic_order">字典序递增</a> 插入。如果发现有趣的现象，可以和同学或助教讨论原因。</p>
+<h1>选做练习</h1>
+<p>以下内容不参与评分，但自动评分器仍会给你反馈。</p>
+<p>请在 BSTMap 类中实现以下方法：</p>
+<ul>
+<li><code>iterator()</code></li>
+<li><code>keySet()</code></li>
+<li><code>remove(K key)</code></li>
+<li><code>remove(K key, V value)</code></li>
+</ul>
+<p>方法说明：</p>
+<ul>
+<li><code>iterator()</code>：应返回一个遍历所有键（Key）的迭代器。</li>
+<li><code>remove(K key)</code>：若 key 不存在于 BSTMap 中，返回 null；若存在，则删除该键值对并返回对应的 value。</li>
+<li><code>remove(K key, V value)</code>：扩展功能，仅在键值完全匹配时删除。</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>实现 <code>keySet()</code> 和 <code>iterator()</code> 时，不得使用额外的实例变量存储键集合（即需动态生成）。</li>
+<li><code>remove()</code> 的实现难度较高，建议作为深入练习。</li>
+</ul>
+<h1>提交</h1>
+<p>确保你完成了 <code>BSTMap.java</code> 与 <code>speedTestResults.txt</code> 并像往常一样通过 git 提交到 Gradescope 上。<br>
+<img src="/img/TreesPost/lab7submission.png" alt=""></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://github.com/WatsonthePeanut">WatsonthePeanut</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/2025/08/12/Lab-7-BSTMap/">http://example.com/2025/08/12/Lab-7-BSTMap/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="http://example.com" target="_blank">夢よ未来へ</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/CS61B/">CS61B</a></div><div class="post-share"><div class="social-share" data-image="/img/cover.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related  no-desc" href="/2025/08/05/Trees/" title="树（Trees）"><img class="cover" src="/img/TreesPost/0.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">树（Trees）</div></div></div></a><a class="pagination-related  no-desc" href="/2025/08/14/Hashing/" title="哈希表（Hash Tables）"><img class="cover" src="/img/HashingPost/0.0.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">哈希表（Hash Tables）</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related no-desc" href="/2025/06/05/Arrays/" title="数组（Arrays）"><img class="cover" src="/img/ArraysPost/0.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-06-05</div><div class="info-item-2">数组（Arrays）</div></div></div></a><a class="pagination-related" href="/2025/07/31/Asymptotics/" title="渐近分析"><img class="cover" src="/img/AsymptoticsPost/0.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-07-31</div><div class="info-item-2">渐近分析</div></div><div class="info-2"><div class="info-item-1">大概是一节数学课</div></div></div></a><a class="pagination-related" href="/2025/05/22/Data-Structure/" title="Data Structure"><img class="cover" src="/img/dataStructurePost/0.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-05-22</div><div class="info-item-2">Data Structure</div></div><div class="info-2"><div class="info-item-1">基于 CS 61B Spring 2024 的数据结构笔记</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">BSTMap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%89%E7%95%8C%E7%B1%BB%E5%9E%8B%E5%8F%82%E6%95%B0"><span class="toc-number">2.1.</span> <span class="toc-text">有界类型参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">具体实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">有多快？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">4.</span> <span class="toc-text">选做练习</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">5.</span> <span class="toc-text">提交</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url(/img/cover.jpg);"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;2025 By WatsonthePeanut</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></span></div><div class="footer_custom_text">繋いでいこうね MY FUTURE。</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'transparent' : 'transparent'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'WatsonthePeanut/Giscus-blogcmt',
+      'data-repo-id': 'R_kgDOOzHPtQ',
+      'data-category-id': 'DIC_kwDOOzHPtc4Cqyrs',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !false) {
+    if (false) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script id="canvas_nest" defer="defer" color="255,255,255" opacity="1" zIndex="-1" count="150" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
